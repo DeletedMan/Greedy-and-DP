@@ -1,0 +1,61 @@
+#include<iostream>
+#include<bits/stdc++.h>
+#include<cstring>
+#include<cmath>
+using namespace std;
+
+int main()
+{
+  int test;
+  std::cin>>test;
+  while(test--)
+  {
+    int n;
+    std::cin>>n;
+    set<string>dict;
+    int i,j,k,l;
+    string str;
+    for(i=0;i<n;i++)
+    {
+      std::cin>>str;
+      dict.insert(str);
+    }
+    std::cin>>str;
+    l=str.length();
+    bool dp[l+1][l+1];
+    memset(dp,false,sizeof(dp));
+    for(int g=1;g<=l;g++)
+    {
+      for(i=0;i<=l-g;i++)
+      {
+        string temp;
+        j=i+g-1;
+        temp=str.substr(i,g);
+        if(dict.find(temp)!=dict.end())
+        {
+          dp[i][j]=true;
+        }
+        else
+        {
+          for(k=i+1;k<j+1;k++)
+          {
+            if(dp[i][k-1] && dp[k][j])
+            {
+              dp[i][j]=true;
+              break;
+            }
+          }
+        }
+      }
+    }
+    if(dp[0][l-1])
+    {
+      std::cout<<"1"<<endl;
+    }
+    else
+    {
+      std::cout<<"0"<<endl;
+    }
+  }
+  return 0;
+}
