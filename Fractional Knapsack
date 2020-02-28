@@ -1,0 +1,90 @@
+Given weights and values of N items, we need to put these items in a knapsack of capacity W to get the maximum total value in the knapsack.
+Note: Unlike 0/1 knapsack, you are allowed to bread the item.
+
+Input:
+First line consists of an integer T denoting the number of test cases. First line consists of two integers N and W, denoting number of items and weight respectively. Second line of every test case consists of 2*N spaced integers denoting Values and weight respectively. (Value1 Weight1 Value2 Weight2.... ValueN WeightN)
+
+Output:
+Print the maximum value possible to put items in a knapsack, upto 2 decimal place.
+
+Constraints:
+1 <= T <= 100
+1 <= N <= 100
+1 <= W <= 100
+
+Example:
+Input:
+2
+3 50
+60 10 100 20 120 30
+2 50
+60 10 100 20
+
+Output:
+240.00
+160.00
+
+Explanation:
+Testcase 1: Total maximum value of item we can have is 240.00 from the given capacity of sack.
+***********************************Code******************************************************************
+#include<iostream>
+#include<bits/stdc++.h>
+#include<algorithm>
+#include<cmath>
+#include<stack>
+#include<queue>
+#include<ctime>
+#include<vector>
+using namespace std;
+
+bool cmp(const pair<int,int> &a,const pair<int,int> &b)
+{
+  return a.first>b.first;
+}
+int FractionalKnapsack(int arr[],int n,int w)
+{
+  vector<pair<int,int>>vect;
+  for(int i=0;i<n;i+=2)
+  {
+    vect.push_back(make_pair((arr[i]/arr[i+1]),i+1));
+  }
+  sort(vect.begin(),vect.end(),cmp);
+  int total_profit=0;
+  vector<pair<int,int>>::iterator itr=vect.begin();
+  while(itr!=vect.end())
+  {
+    if(arr[itr->second]<=w)
+    {
+      total_profit+=arr[itr->second-1];
+      w=w-arr[itr->second];
+      itr++;
+    }
+    else if(arr[itr->second]>w && w>0)
+    {
+      total_profit+=(arr[itr->second-1]/arr[itr->second])*w;
+      itr++;
+    }
+    else
+    {
+      itr++;
+    }
+  }
+  return total_profit;
+}
+int main()
+{
+  int test;
+  std::cin>>test;
+  while(test--)
+  {
+    int n,w;
+    std::cin>>n>>w;
+    int arr[2*n];
+    for(int i=0;i<2*n;i++)
+    {
+      std::cin>>arr[i];
+    }
+    std::cout<<FractionalKnapsack(arr,2*n,w)<<endl;
+  }
+  return 0;
+}
